@@ -117,13 +117,24 @@ public class Board {
     //print players board
     public void printPlayerBoard(){
         //format the top row of grid selections
+        System.out.print("__");
         for (int i=0; i< this.size; i++){
-            System.out.print("___" + "_"+i+"_");
+            if (i<10) {
+                System.out.print("__" + "_" + i + "__");
+            } else {
+                System.out.print("__" + "_" + i + "_");
+            }
         }
         System.out.println("");
+
         //format entire grid
         for (int i=0; i< this.size; i++){
-            System.out.print(i+"|");
+            //format check is there are more than 10 rows to ensure it stays in line.
+            if (i<10) {
+                System.out.print(i + "| ");
+            } else {
+            System.out.print(i + "|");
+            }
             for(int j=0; j<this.size; j++){
                 //System.out.print(" i "+ i +" j " +j);
                 //if board is 100 it has been clicked, check for any empty space.

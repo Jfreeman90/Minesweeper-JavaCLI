@@ -6,11 +6,15 @@ public class Board {
     int size;
     //board shown is what the player sees and interacts with in command line.
     int[][] boardShown;
-    //hidden board hold the created game information
+    //hidden board hold the created game information.
     int[][] boardHidden;
+    //number of bombs the user is avoiding
     int bombs;
+    //number of flags a user can use.
     int flags;
+    //checks if the game is in play or has ended.
     boolean gameInPlay=true;
+    //how many moves the player has made.
     int playerMoveCount=0;
 
     //create the board object by choosing the number of bombs you would like

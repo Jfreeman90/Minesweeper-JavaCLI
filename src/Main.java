@@ -8,12 +8,12 @@ public class Main {
         //initialise scanner
         Scanner sc= new Scanner(System.in);
         boolean diffCheck = false;
-        int difficulty = 0;
-        System.out.println("Choose your difficulty --- 1) EASY, 2)MEDIUM, 3) HARD----Enter 1,2 or 3.");
+        int diff = 0;
+        System.out.println("Choose your difficulty --- 1) EASY, 2) MEDIUM, 3) HARD----Enter 1,2 or 3.");
         do{
             if(sc.hasNextInt()){
-                difficulty = sc.nextInt();
-                if (difficulty>=1 && difficulty <=3) {
+                diff = sc.nextInt();
+                if (diff>=1 && diff <=3) {
                     diffCheck = true;
                 } else{
                     System.out.println("Enter a valid value: 1, 2 or 3.");
@@ -24,20 +24,26 @@ public class Main {
             }
         }while(!diffCheck);
 
-        if (difficulty==1){
+        //difficulty
+        Difficulty difficulty = new Difficulty();
+
+        if (diff==1){
             System.out.println("Difficulty Chosen: EASY");
-        } else if (difficulty==2){
+            difficulty.setDifficulty("EASY");
+        } else if (diff==2){
             System.out.println("Difficulty Chosen: MEDIUM");
+            difficulty.setDifficulty("MEDIUM");
         } else {
             System.out.println("Difficulty Chosen: HARD");
+            difficulty.setDifficulty("HARD");
         }
 
-
-
-        System.out.println("Difficulty Chosen: " + difficulty);
-
+        //set the difficulty values based on the difficulty selected
+        difficulty.setSize();
+        difficulty.setBombs();
+        difficulty.setFlags();
         //create board based off the difficulty chosen by the user.
-        Board gameBoard = new Board(5, 5, 5);
+        Board gameBoard = new Board(difficulty.getSize(), difficulty.getBombs(), difficulty.getFlags());
 
         //initiate the grid by placing the bombs.
         gameBoard.setBombs();

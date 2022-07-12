@@ -4,8 +4,8 @@ public class Main {
 
     public static void main(String[] args){
         System.out.println("Minesweeper in Command Line.");
-        //create board of size 5 x 5
-        Board gameBoard = new Board(5, 2);
+        //create board
+        Board gameBoard = new Board(5, 5, 5);
 
         //initiate the grid by placing the bombs.
         gameBoard.setBombs();

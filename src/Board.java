@@ -3,20 +3,24 @@ import java.util.Scanner;
 
 public class Board {
     //default size
-    int size=6;
+    int size;
     //board shown is what the player sees and interacts with in command line.
-    int[][] boardShown = new int[size][size];
+    int[][] boardShown;
     //hidden board hold the created game information
-    int[][] boardHidden = new int[size][size];
+    int[][] boardHidden;
     int bombs;
     int flags;
     boolean gameInPlay=true;
     int playerMoveCount=0;
 
     //create the board object by choosing the number of bombs you would like
-    public Board(int flags, int bombs){
+    public Board(int size, int bombs, int flags){
+        this.size=size;
         this.flags=flags;
         this.bombs=bombs;
+        this.boardShown =new int[this.size][this.size];
+        //hidden board hold the created game information
+        this.boardHidden = new int[this.size][this.size];
     }
 
     //put the bombs into the boards.
@@ -29,11 +33,11 @@ public class Board {
             //System.out.println("co-ordinate(index starting at 0,0 in top left) for bomb: (" +j +" , " + g+" )");
 
             //bomb already in this position
-            if (boardHidden[g][j]==10){
+            if (this.boardHidden[g][j]==10){
                 assert true;
             } else {    //place bomb in this position by numbering the grid '10' to indicate a bomb.
-                boardShown[g][j]=10;
-                boardHidden[g][j]=10;
+                this.boardShown[g][j]=10;
+                this.boardHidden[g][j]=10;
                 k++;
             }
         }
@@ -48,7 +52,7 @@ public class Board {
                 //System.out.println("i " + i + "j" + j);
 
                 //if he grid is already a bomb skip it - prevents having to check to count is in the loop below.
-                if (boardHidden[i][j]==10){
+                if (this.boardHidden[i][j]==10){
                     assert true;
                 } else {
 
@@ -64,14 +68,14 @@ public class Board {
                             //only allow to check if x and y lie inside the bounds of the matrix.
                             if ((x >= 0 && x < this.size) && (y >= 0 && y < this.size)) {
                                 //add to grid counter if one of the neighbours is a bomb.
-                                if(boardHidden[x][y]==10){
+                                if(this.boardHidden[x][y]==10){
                                     counter++;
                                 }
                             }
 
                         }
                     }
-                    boardHidden[i][j]=counter;
+                    this.boardHidden[i][j]=counter;
 
                 }
             }
@@ -92,11 +96,11 @@ public class Board {
                 //System.out.println("i position to check " + x + " j position to check " + y);
                 //only allow to check if x and y lie inside the bounds of the matrix.
                 if ((x >= 0 && x < this.size) && (y >= 0 && y < this.size)) {
-                    if(boardHidden[x][y]!=10 && boardShown[x][y]!=100 && boardShown[x][y]!=-1){
-                        boardShown[x][y]=100;
+                    if(this.boardHidden[x][y]!=10 && this.boardShown[x][y]!=100 && this.boardShown[x][y]!=-1){
+                        this.boardShown[x][y]=100;
                         //System.out.println("x "+x+ " y " + y);
                         //if the board is a 0 continue to flood else stop
-                        if (boardHidden[x][y]==0) {
+                        if (this.boardHidden[x][y]==0) {
                             floodBoard(x, y);
                         }
                     }
@@ -119,11 +123,11 @@ public class Board {
             for(int j=0; j<this.size; j++){
                 //System.out.print(" i "+ i +" j " +j);
                 //if board is 100 it has been clicked, check for any empty space.
-                if (boardShown[i][j]==100 && boardHidden[i][j]==0){
+                if (this.boardShown[i][j]==100 && this.boardHidden[i][j]==0){
                     System.out.print(" " + "   " + "  ");
-               } else if (boardShown[i][j]==100){
-                    System.out.print(" " + " "+boardHidden[i][j]+" " + "  ");
-               } else if (boardShown[i][j]==-1) {   //flag.
+               } else if (this.boardShown[i][j]==100){
+                    System.out.print(" " + " "+this.boardHidden[i][j]+" " + "  ");
+               } else if (this.boardShown[i][j]==-1) {   //flag.
                     System.out.print(" " + " "+"F"+" " + "  ");
                 }
                 else {
@@ -139,7 +143,6 @@ public class Board {
     public void getNextMove(){
         //initialise scanner
         Scanner sc= new Scanner(System.in);
-
         //get the place user would like to select the grid.
         // -----------ROW----------
         System.out.println("Select a grid to reveal (row and columns start at 0) ");
@@ -180,8 +183,8 @@ public class Board {
             if (flagCheck.equals("Y")){
                 //user wants to plant flag in this spot, only allow if the tile hasn't been revealed yet.
                 //System.out.println("Y");
-                if (boardShown[i][j]!=100) {
-                    boardShown[i][j] = -1;
+                if (this.boardShown[i][j]!=100) {
+                    this.boardShown[i][j] = -1;
                     this.playerMoveCount++;
                     this.flags--;
                 } else {
@@ -190,24 +193,24 @@ public class Board {
             } else if ((flagCheck.equals("N"))) {
                 //System.out.println("N");
                 //check if the user has already input this value
-                if (boardShown[i][j]==100){
+                if (this.boardShown[i][j]==100){
                     System.out.println("Already attempted this grid space try again");
                 } else{
                     //valid move update  visible board to 100 to denote clicked.
                     //System.out.println(boardHidden[i][j]);
                     this.playerMoveCount++;
                     //if tile clicked is 0 then check all surrounding and flood to reveal all areas.
-                    if (boardHidden[i][j]==0){
-                        boardShown[i][j]=100;
+                    if (this.boardHidden[i][j]==0){
+                        this.boardShown[i][j]=100;
                         floodBoard(i, j);
-                    }else if (boardHidden[i][j]==10){
+                    }else if (this.boardHidden[i][j]==10){
                         this.gameInPlay=false;
                         System.out.println("You found a bomb!");
                         System.out.println("------------GAME OVER -----------");
                         System.out.println("--------Game board below---------");
                         printHiddenBoard();
                     } else {// update square clicked and revealed
-                        boardShown[i][j]=100;}
+                        this.boardShown[i][j]=100;}
                 }
             } else {
                 System.out.println("Invalid input - PLease type Y or N only.");
@@ -222,10 +225,10 @@ public class Board {
         for (int i=0; i< this.size; i++){
             for(int j=0; j<this.size; j++){
                 //System.out.print(" i "+ i +" j " +j);
-                if (boardHidden[i][j]==10){
+                if (this.boardHidden[i][j]==10){
                     System.out.print("  " + "B" + "   ");
                 } else {
-                    System.out.print("  " + boardHidden[i][j] + "   ");
+                    System.out.print("  " + this.boardHidden[i][j] + "   ");
                 }
             }
             System.out.println("");
@@ -237,7 +240,7 @@ public class Board {
         int counter=0;
         for (int i=0; i< this.size; i++){
             for(int j=0; j<this.size; j++) {
-                if (boardShown[i][j]==100 || boardShown[i][j]==-1){
+                if (this.boardShown[i][j]==100 || this.boardShown[i][j]==-1){
                     counter++;
                 }
             }

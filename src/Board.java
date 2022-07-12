@@ -116,6 +116,20 @@ public class Board {
 
     //print players board
     public void printPlayerBoard(){
+        //string variables for colours used on the board.
+        final String ANSI_RESET = "\u001B[0m";
+        //flag colour.
+        final String ANSI_RED = "\u001B[31m";
+        //colour 1 bomb
+        final String ANSI_CYAN = "\u001B[36m";
+        //colour 2 bombs
+        final String ANSI_BLUE = "\u001B[34m";
+        //colour 3 bombs
+        final String ANSI_GREEN = "\u001B[32m";
+        //colour 4 bombs
+        final String ANSI_PURPLE = "\u001B[35m";
+        //colour 5+ bombs
+        final String ANSI_YELLOW = "\u001B[33m";
         //format the top row of grid selections
         System.out.print("__");
         for (int i=0; i< this.size; i++){
@@ -141,9 +155,19 @@ public class Board {
                 if (this.boardShown[i][j]==100 && this.boardHidden[i][j]==0){
                     System.out.print(" " + "   " + "  ");
                } else if (this.boardShown[i][j]==100){
-                    System.out.print(" " + " "+this.boardHidden[i][j]+" " + "  ");
+                    //format colours shown.
+                    int value =this.boardHidden[i][j];
+                    switch (value) {
+                        case 1 -> System.out.print(" " + " " + ANSI_CYAN + value + ANSI_RESET + " " + "  ");
+                        case 2 -> System.out.print(" " + " " + ANSI_BLUE + value + ANSI_RESET + " " + "  ");
+                        case 3 -> System.out.print(" " + " " + ANSI_GREEN + value + ANSI_RESET + " " + "  ");
+                        case 4 -> System.out.print(" " + " " + ANSI_PURPLE + value + ANSI_RESET + " " + "  ");
+                        default -> {
+                            System.out.print(" " + " " + ANSI_YELLOW + value + ANSI_RESET + " " + "  ");
+                        }
+                    }
                } else if (this.boardShown[i][j]==-1) {   //flag.
-                    System.out.print(" " + " "+"F"+" " + "  ");
+                    System.out.print(" " + " " +ANSI_RED +"F" +ANSI_RESET+ " " + "  ");
                 }
                 else {
                     System.out.print(" " + " # " + "  ");

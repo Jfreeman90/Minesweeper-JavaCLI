@@ -36,7 +36,7 @@ public class Difficulty {
 
     public void setBombs(){
         if (this.difficulty.equals("EASY")){
-            this.bombs=1;
+            this.bombs=5;
         } else if (this.difficulty.equals("MEDIUM")){
             this.bombs=10;
         } else {

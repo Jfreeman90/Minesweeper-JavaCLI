@@ -57,6 +57,7 @@ public class Main {
 
         //game loop while game is in play keep asking player for their new move until game is over.
         while(gameBoard.getGameInPlay()) {
+            //System.out.println(gameBoard.getGameInPlay());
             //current players board
             gameBoard.printPlayerBoard();
             //ask player to enter move
@@ -64,5 +65,9 @@ public class Main {
             //check for player winning after each move played.
             gameBoard.checkForWin();
         }
+
+        // end timer and exit program
+        gameBoard.endTimer();
+
     }
 }

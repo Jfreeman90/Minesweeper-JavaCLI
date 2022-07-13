@@ -18,8 +18,18 @@ public class Board {
     boolean gameInPlay=true;
     //how many moves the player has made.
     int playerMoveCount=0;
+    //initiate timer object
+    Timer T = new Timer();
     //timer
     int timer=0;
+    //Timertask method that increases timer every second
+    TimerTask addSecond = new TimerTask() {
+        @Override
+        public void run() {
+            //System.out.println("+1 second");
+            timer++;
+        }
+    };
 
     //create the board object by choosing the number of bombs you would like
     public Board(int size, int bombs, int flags){
@@ -267,8 +277,8 @@ public class Board {
                             System.out.println("------------GAME OVER -----------");
                             System.out.println("GAME TIME: " + this.timer + "(s)");
                             System.out.println("--------Game board below---------");
-                            printHiddenBoard();
                             this.gameInPlay = false;
+                            printHiddenBoard();
                         }
                     } else {this.boardShown[i][j]=100;}
                 }
@@ -316,8 +326,9 @@ public class Board {
             System.out.println("--------CONGRATULATIONS YOU WON!!----------");
             System.out.println("GAME TIME: " +this.timer +"(s) You took " + playerMoveCount +" attempts.");
             System.out.println("-------------------------------------------");
-            printPlayerBoard();
             this.gameInPlay=false;
+            printPlayerBoard();
+
         }
     }
 
@@ -326,20 +337,15 @@ public class Board {
         return this.gameInPlay;
     }
 
-    //create a timer on object creation
+    //create a timer event that runs every second
     public void startTimer() {
-        //initiate timer object
-        Timer T = new Timer();
-        //add a task to the timer that will execute at given times
-        TimerTask addSecond = new TimerTask() {
-            @Override
-            public void run() {
-                //System.out.println("+1 second");
-                //System.out.println(timer);
-                timer++;
-            }
-        };
-        T.scheduleAtFixedRate(addSecond,0, 1000);
+        this.T.scheduleAtFixedRate(this.addSecond, 0, 1000);
+    }
+
+    //end both the timer and timer events to stop the program.
+    public void endTimer(){
+        this.addSecond.cancel();
+        this.T.cancel();
     }
 
 }

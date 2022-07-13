@@ -1,5 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Board {
     //default size
@@ -16,6 +18,8 @@ public class Board {
     boolean gameInPlay=true;
     //how many moves the player has made.
     int playerMoveCount=0;
+    //timer
+    int timer=0;
 
     //create the board object by choosing the number of bombs you would like
     public Board(int size, int bombs, int flags){
@@ -130,6 +134,14 @@ public class Board {
         final String ANSI_PURPLE = "\u001B[35m";
         //colour 5+ bombs
         final String ANSI_YELLOW = "\u001B[33m";
+        //white background
+        final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+        //Print out the time that has elapsed since the game started.
+        System.out.println(ANSI_YELLOW + "------- Time elapsed: " + this.timer + "(s) -------" + ANSI_RESET);
+        //format mines remaining and flags remaining.
+        System.out.println("Flags remaining: "+ this.flags + " Mines hidden: "+ this.bombs );
+
         //format the top row of grid selections
         System.out.print("__");
         for (int i=0; i< this.size; i++){
@@ -151,9 +163,9 @@ public class Board {
             }
             for(int j=0; j<this.size; j++){
                 //System.out.print(" i "+ i +" j " +j);
-                //if board is 100 it has been clicked, check for any empty space.
+                //Empty Space formatting
                 if (this.boardShown[i][j]==100 && this.boardHidden[i][j]==0){
-                    System.out.print(" " + "   " + "  ");
+                    System.out.print(ANSI_WHITE_BACKGROUND+ " " + "   " + "  "+ANSI_RESET);
                } else if (this.boardShown[i][j]==100){
                     //format colours shown.
                     int value =this.boardHidden[i][j];
@@ -213,7 +225,7 @@ public class Board {
         System.out.println("Co-ordinates selected (row,col):  (" +i+","+j+")");
 
         //ask user if they would like to flag or not
-        System.out.print("Would you like to place a flag at this spot? Y/N - Current flags remaining: " + this.flags + " ");
+        System.out.print("Would you like to place a flag at this spot? Y/N ");
         String flagCheck= sc.next().toUpperCase();
         System.out.println(flagCheck.toUpperCase());
 
@@ -246,6 +258,7 @@ public class Board {
                         this.gameInPlay=false;
                         System.out.println("You found a bomb!");
                         System.out.println("------------GAME OVER -----------");
+                        System.out.println("GAME TIME: " +this.timer +"(s)");
                         System.out.println("--------Game board below---------");
                         printHiddenBoard();
                     } else {// update square clicked and revealed
@@ -294,13 +307,29 @@ public class Board {
         //System.out.println("Tiles revealed: " + revealedCount());
         //System.out.println("All possible squares that can be clicked: " + allValidSquares);
         if (revealedCount()==allValidSquares){
-            System.out.println("YOU HAVE FOUND ALL OF THE BOMBS");
-            System.out.println("---CONGRATULATIONS YOU WON!!---");
-            System.out.println("You took " + playerMoveCount +" attempts.");
-            System.out.println("-------------------------------");
+            System.out.println("-----YOU HAVE FOUND ALL OF THE BOMBS-------");
+            System.out.println("--------CONGRATULATIONS YOU WON!!----------");
+            System.out.println("GAME TIME: " +this.timer +"(s) You took " + playerMoveCount +" attempts.");
+            System.out.println("-------------------------------------------");
             printPlayerBoard();
             this.gameInPlay=false;
-
         }
     }
+
+    //create a timer on object creation
+    public void startTimer() {
+        //initiate timer object
+        Timer T = new Timer();
+        //add a task to the timer that will execute at given times
+        TimerTask addSecond = new TimerTask() {
+            @Override
+            public void run() {
+                //System.out.println("+1 second");
+                //System.out.println(timer);
+                timer++;
+            }
+        };
+        T.scheduleAtFixedRate(addSecond,0, 1000);
+    }
+
 }

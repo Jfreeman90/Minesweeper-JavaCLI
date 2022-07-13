@@ -52,6 +52,9 @@ public class Main {
         //check the hidden board has been constructed correctly.
         //gameBoard.printHiddenBoard();
 
+        //start timer
+        gameBoard.startTimer();
+
         //game loop while game is in play keep asking player for their new move until game is over.
         while(gameBoard.gameInPlay) {
             //current players board

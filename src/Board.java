@@ -255,21 +255,26 @@ public class Board {
                         this.boardShown[i][j]=100;
                         floodBoard(i, j);
                     }else if (this.boardHidden[i][j]==10){
-                        this.gameInPlay=false;
-                        System.out.println("You found a bomb!");
-                        System.out.println("------------GAME OVER -----------");
-                        System.out.println("GAME TIME: " +this.timer +"(s)");
-                        System.out.println("--------Game board below---------");
-                        printHiddenBoard();
-                    } else {// update square clicked and revealed
-                        this.boardShown[i][j]=100;}
+                        //check for first move and place flag if the first move is on a bomb as to not end the game immediately.
+                        if(this.playerMoveCount==1) {
+                            //System.out.println("First Move landed on a bomb");
+                            this.boardShown[i][j] = -1;
+                            this.playerMoveCount++;
+                            this.flags--;
+                        }
+                        else {
+                            System.out.println("You found a bomb!");
+                            System.out.println("------------GAME OVER -----------");
+                            System.out.println("GAME TIME: " + this.timer + "(s)");
+                            System.out.println("--------Game board below---------");
+                            printHiddenBoard();
+                            this.gameInPlay = false;
+                        }
+                    } else {this.boardShown[i][j]=100;}
                 }
-            } else {
-                System.out.println("Invalid input - PLease type Y or N only.");
             }
-        }else {
-            System.out.println("INVALID MOVE (out of bounds) TRY AGAIN");
-        }
+            else {System.out.println("Invalid input - PLease type Y or N only.");}
+        }else { System.out.println("INVALID MOVE (out of bounds) TRY AGAIN");}
     }
 
     //print hidden board
@@ -314,6 +319,11 @@ public class Board {
             printPlayerBoard();
             this.gameInPlay=false;
         }
+    }
+
+    //return boolean for if the game is in play
+    public boolean getGameInPlay(){
+        return this.gameInPlay;
     }
 
     //create a timer on object creation

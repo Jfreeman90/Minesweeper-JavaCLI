@@ -56,7 +56,7 @@ public class Main {
         gameBoard.startTimer();
 
         //game loop while game is in play keep asking player for their new move until game is over.
-        while(gameBoard.gameInPlay) {
+        while(gameBoard.getGameInPlay()) {
             //current players board
             gameBoard.printPlayerBoard();
             //ask player to enter move
